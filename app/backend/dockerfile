@@ -1,0 +1,22 @@
+# Use an official Node LTS base image
+FROM node:18-alpine
+
+# Build argument to control dependency installation
+ARG NODE_ENV=production
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Copy package.json & lockfile and install dependencies
+COPY package*.json ./
+# Install all dependencies in development, only production in production
+RUN if [ "$NODE_ENV" = "development" ]; then npm install; else npm install --production; fi
+
+# Bundle app source
+COPY . .
+
+# Expose the port your service listens on
+EXPOSE 4000
+
+# Run the service
+CMD ["node", "index.js"]

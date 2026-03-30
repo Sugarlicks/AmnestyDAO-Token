@@ -1,0 +1,42 @@
+actions:
+  - name: rewardUser
+    definition:
+      kind: synchronous
+      handler: http://auth-service:4000/actions/rewardUser
+      forward_client_headers: true
+      arguments:
+        - name: toUserId
+          type: uuid!
+        - name: amount
+          type: Float!
+        - name: description
+          type: String!
+      output_type: TokenTransaction!
+    permissions:
+      - role: user
+  - name: donateToCampaign
+    definition:
+      kind: synchronous
+      handler: http://auth-service:4000/actions/donateToCampaign
+      forward_client_headers: true
+      arguments:
+        - name: campaignId
+          type: uuid!
+        - name: amount
+          type: Float!
+        - name: signedTransaction
+          type: String!
+      output_type: CampaignDonation!
+    permissions:
+      - role: user
+  - name: getUserTransactions
+    definition:
+      kind: synchronous
+      handler: http://auth-service:4000/actions/getUserTransactions
+      forward_client_headers: true
+      arguments:
+        - name: userId
+          type: uuid!
+      output_type: "[TokenTransaction!]!"
+    permissions:
+      - role: user

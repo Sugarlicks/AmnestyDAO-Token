@@ -1,0 +1,38 @@
+# Use Node 20 as base image (matching your package.json requirements)
+FROM node:20
+
+# Install system dependencies required for electron-builder
+RUN apt-get update && apt-get install -y \
+    libgtk-3-dev \
+    libwebkit2gtk-4.0-dev \
+    libappindicator3-dev \
+    librsvg2-dev \
+    patchelf \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
+
+# Build the application
+RUN npm run build:electron
+
+# Create output directory
+RUN mkdir -p /output
+
+# Copy built files to output directory
+RUN cp -r dist/electron/* /output/
+
+# The built files will be in /output/

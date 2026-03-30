@@ -1,0 +1,83 @@
+table:
+  name: campaigns
+  schema: public
+array_relationships:
+  - name: donations
+    using:
+      foreign_key_constraint_on:
+        column: campaign_id
+        table:
+          name: campaign_donations
+          schema: public
+object_relationships:
+  - name: creator_user
+    using:
+      foreign_key_constraint_on: created_by
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - title
+        - description
+        - full_details
+        - image_url
+        - image_data
+        - goal_tokens
+        - tokens_raised
+        - category
+        - country
+        - language
+        - deadline
+        - supporter_count
+        - campaign_url
+        - is_active
+        - created_at
+        - updated_at
+        - created_by
+      filter:
+        is_active:
+          _eq: true
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        created_by:
+          _eq: X-Hasura-User-Id
+      columns:
+        - title
+        - description
+        - full_details
+        - image_url
+        - image_data
+        - goal_tokens
+        - category
+        - country
+        - language
+        - deadline
+        - campaign_url
+        - is_active
+        - created_by
+update_permissions:
+  - role: user
+    permission:
+      filter: {}
+      check: {}
+      columns:
+        - title
+        - description
+        - full_details
+        - image_url
+        - image_data
+        - goal_tokens
+        - category
+        - country
+        - language
+        - deadline
+        - campaign_url
+        - is_active
+delete_permissions:
+  - role: user
+    permission:
+      filter: {}
+

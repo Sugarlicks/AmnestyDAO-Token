@@ -1,0 +1,26 @@
+# Node dependencies
+node_modules/
+
+# Env files
+.env
+
+# Capacitor
+android/
+ios/
+electron/
+
+# Build files
+dist/
+
+# Cache files
+.cache/
+
+.DS_Store
+
+# SSL Certificates (should never be committed)
+backend/certbot/conf/
+backend/certbot/www/
+
+# Android Keystore files (should never be committed)
+**/*.keystore
+**/keystore.properties

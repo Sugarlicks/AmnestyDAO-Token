@@ -1,0 +1,13 @@
+version: 3
+endpoint: http://localhost:8080
+admin_secret: ${HASURA_ADMIN_SECRET}
+metadata_directory: metadata
+actions:
+  kind: synchronous
+  handler_webhook_baseurl: http://localhost:4000
+  codegen:
+    framework: ""
+    output_dir: ""
+# Environment variables for local development
+environment_variables:
+  ACTIONS_BASE_URL: http://localhost:4000

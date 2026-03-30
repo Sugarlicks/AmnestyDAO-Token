@@ -1,0 +1,73 @@
+type Mutation {
+  rewardUser(
+    toUserId: uuid!
+    amount: Float!
+    description: String!
+  ): TokenTransaction!
+
+  donateToCampaign(
+    campaignId: uuid!
+    amount: Float!
+    signedTransaction: String!
+  ): CampaignDonation!
+}
+
+type Query {
+  getUserTransactions(
+    userId: uuid!
+  ): [TokenTransaction!]!
+}
+
+enum TransactionType {
+  TRANSFER
+  TREASURY_DEPOSIT
+  TREASURY_WITHDRAWAL
+  REWARD
+  DONATION
+}
+
+type TokenBalance {
+  balance: Float!
+  lastUpdated: Timestamp!
+}
+
+type TokenTransaction {
+  id: uuid!
+  userId: uuid
+  fromUserId: uuid
+  toUserId: uuid
+  amount: Float!
+  tokenAmount: Float
+  description: String
+  type: TransactionType
+  transactionType: TransactionType
+  cardanoTxHash: String
+  fromWalletAddress: String
+  toWalletAddress: String
+  contributionId: uuid
+  campaignId: uuid
+  transactionStatus: String
+  confirmedAt: Timestamp
+  errorMessage: String
+  timestamp: Timestamp!
+}
+
+type CampaignDonation {
+  id: uuid!
+  campaignId: uuid!
+  userId: uuid!
+  amount: Float!
+  donatedAt: Timestamp!
+  txHash: String
+  pendingTxHash: String
+}
+
+type TransactionResult {
+  txHash: String!
+  message: String!
+}
+
+scalar Timestamp
+
+scalar uuid
+

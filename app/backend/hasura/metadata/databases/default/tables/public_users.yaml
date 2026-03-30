@@ -1,0 +1,99 @@
+table:
+  name: users
+  schema: public
+array_relationships:
+  - name: chat_participants
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: chat_participants
+          schema: public
+  - name: memberships
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: memberships
+          schema: public
+  - name: messages
+    using:
+      foreign_key_constraint_on:
+        column: sender_id
+        table:
+          name: messages
+          schema: public
+insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      set:
+        status: pending
+      columns:
+        - affiliations
+        - country
+        - created_at
+        - first_name
+        - language
+        - last_name
+        - preferred_name
+        - profile_image
+        - public_key
+        - reason
+        - status
+        - user_id
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - affiliations
+        - country
+        - created_at
+        - first_name
+        - language
+        - last_name
+        - preferred_name
+        - profile_image
+        - public_key
+        - reason
+        - user_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - affiliations
+        - country
+        - created_at
+        - first_name
+        - language
+        - last_name
+        - preferred_name
+        - profile_image
+        - public_key
+        - reason
+        - status
+        - user_id
+      filter: {}
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - affiliations
+        - country
+        - created_at
+        - first_name
+        - language
+        - last_name
+        - preferred_name
+        - profile_image
+        - public_key
+        - reason
+        - user_id
+      filter: {}
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id

@@ -1,0 +1,23 @@
+{
+  "name": "hrdao-mvp",
+  "version": "0.0.1",
+  "author": "Matou Collective",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/barcode-scanner": "^2.2.0",
+    "@capacitor/browser": "^7.0.0",
+    "@capacitor/cli": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/share": "^7.0.0",
+    "@capacitor/splash-screen": "^7.0.0",
+    "@capgo/capacitor-native-biometric": "^7.5.1",
+    "capacitor-secure-storage-plugin": "^0.12.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.32.6"
+  },
+  "description": "Human Rights DAO Application"
+}

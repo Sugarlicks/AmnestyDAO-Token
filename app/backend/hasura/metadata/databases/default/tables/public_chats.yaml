@@ -1,0 +1,36 @@
+table:
+  name: chats
+  schema: public
+array_relationships:
+  - name: chat_participants
+    using:
+      foreign_key_constraint_on:
+        column: chat_id
+        table:
+          name: chat_participants
+          schema: public
+  - name: memberships
+    using:
+      foreign_key_constraint_on:
+        column: chat_id
+        table:
+          name: memberships
+          schema: public
+  - name: messages
+    using:
+      foreign_key_constraint_on:
+        column: chat_id
+        table:
+          name: messages
+          schema: public
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - is_private
+        - member_count
+        - image
+        - name
+        - created_at
+        - id
+      filter: {}

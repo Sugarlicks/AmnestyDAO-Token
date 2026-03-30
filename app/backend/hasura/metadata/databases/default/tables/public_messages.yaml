@@ -1,0 +1,45 @@
+table:
+  name: messages
+  schema: public
+object_relationships:
+  - name: chat
+    using:
+      foreign_key_constraint_on: chat_id
+  - name: user
+    using:
+      foreign_key_constraint_on: sender_id
+insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - content
+        - sent_at
+        - chat_id
+        - id
+        - sender_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - content
+        - sent_at
+        - chat_id
+        - id
+        - sender_id
+      filter: {}
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - content
+        - sent_at
+        - chat_id
+        - id
+        - sender_id
+      filter: {}
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      filter: {}

@@ -1,0 +1,56 @@
+custom_types:
+  enums:
+    - name: TransactionType
+      values:
+        - TRANSFER
+        - TREASURY_DEPOSIT
+        - TREASURY_WITHDRAWAL
+        - REWARD
+        - DONATION
+
+  objects:
+    - name: TokenBalance
+      fields:
+        - name: balance
+          type: Float!
+        - name: lastUpdated
+          type: Timestamp!
+
+    - name: TokenTransaction
+      fields:
+        - name: id
+          type: UUID!
+        - name: userId
+          type: UUID
+        - name: fromUserId
+          type: UUID
+        - name: toUserId
+          type: UUID
+        - name: amount
+          type: Float!
+        - name: tokenAmount
+          type: Float
+        - name: description
+          type: String
+        - name: type
+          type: TransactionType
+        - name: transactionType
+          type: TransactionType
+        - name: cardanoTxHash
+          type: String
+        - name: fromWalletAddress
+          type: String
+        - name: toWalletAddress
+          type: String
+        - name: contributionId
+          type: UUID
+        - name: campaignId
+          type: UUID
+        - name: transactionStatus
+          type: String
+        - name: confirmedAt
+          type: Timestamp
+        - name: errorMessage
+          type: String
+        - name: timestamp
+          type: Timestamp! 

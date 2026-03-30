@@ -1,0 +1,63 @@
+table:
+  name: token_transactions
+  schema: public
+object_relationships:
+  - name: from_user
+    using:
+      foreign_key_constraint_on: from_user_id
+  - name: to_user
+    using:
+      foreign_key_constraint_on: to_user_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  - name: contribution
+    using:
+      foreign_key_constraint_on: contribution_id
+  - name: campaign
+    using:
+      manual_configuration:
+        remote_table:
+          name: campaigns
+          schema: public
+        column_mapping:
+          campaign_id: id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - user_id
+        - from_user_id
+        - to_user_id
+        - amount
+        - token_amount
+        - description
+        - transaction_type
+        - cardano_tx_hash
+        - from_wallet_address
+        - to_wallet_address
+        - contribution_id
+        - campaign_id
+        - transaction_status
+        - confirmed_at
+        - error_message
+        - timestamp
+        - created_at
+      filter:
+        _or:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - from_user_id:
+              _eq: X-Hasura-User-Id
+          - to_user_id:
+              _eq: X-Hasura-User-Id
+          - _exists:
+              _table:
+                schema: public
+                name: users
+              _where:
+                user_id:
+                  _eq: X-Hasura-User-Id
+                status:
+                  _eq: admin

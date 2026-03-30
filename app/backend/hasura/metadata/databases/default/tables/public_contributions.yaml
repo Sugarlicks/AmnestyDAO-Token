@@ -1,0 +1,104 @@
+table:
+  name: contributions
+  schema: public
+array_relationships:
+  - name: user_contributions
+    using:
+      foreign_key_constraint_on:
+        column: contribution_id
+        table:
+          name: user_contributions
+          schema: public
+object_relationships:
+  - name: creator
+    using:
+      foreign_key_constraint_on: created_by
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - title
+        - description
+        - full_details
+        - image_url
+        - image_data
+        - token_reward
+        - contribution_type
+        - action_button_text
+        - external_link
+        - deadline
+        - target_participants
+        - current_participants
+        - country
+        - language
+        - is_active
+        - created_at
+        - updated_at
+        - created_by
+      filter:
+        _or:
+          - is_active:
+              _eq: true
+          - _exists:
+              _table:
+                schema: public
+                name: users
+              _where:
+                user_id:
+                  _eq: X-Hasura-User-Id
+                status:
+                  _eq: admin
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        created_by:
+          _eq: X-Hasura-User-Id
+      columns:
+        - title
+        - description
+        - full_details
+        - image_url
+        - image_data
+        - token_reward
+        - contribution_type
+        - action_button_text
+        - external_link
+        - deadline
+        - target_participants
+        - country
+        - language
+        - is_active
+        - created_by
+update_permissions:
+  - role: user
+    permission:
+      filter:
+        created_by:
+          _eq: X-Hasura-User-Id
+      check:
+        created_by:
+          _eq: X-Hasura-User-Id
+      columns:
+        - title
+        - description
+        - full_details
+        - image_url
+        - image_data
+        - token_reward
+        - contribution_type
+        - action_button_text
+        - external_link
+        - deadline
+        - target_participants
+        - country
+        - language
+        - is_active
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        created_by:
+          _eq: X-Hasura-User-Id
+

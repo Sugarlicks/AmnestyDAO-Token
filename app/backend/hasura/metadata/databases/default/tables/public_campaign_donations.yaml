@@ -1,0 +1,47 @@
+table:
+  name: campaign_donations
+  schema: public
+object_relationships:
+  - name: campaign
+    using:
+      foreign_key_constraint_on: campaign_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - campaign_id
+        - user_id
+        - amount
+        - donated_at
+        - transaction_id
+      filter:
+        _or:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - _exists:
+              _table:
+                schema: public
+                name: users
+              _where:
+                user_id:
+                  _eq: X-Hasura-User-Id
+                status:
+                  _eq: admin
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - campaign_id
+        - user_id
+        - amount
+        - transaction_id
+update_permissions: []
+delete_permissions: []
+

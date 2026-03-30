@@ -1,0 +1,40 @@
+- table:
+    schema: public
+    name: token_transactions
+  array_relationships:
+    - name: from_user
+      using:
+        foreign_key_constraint_on: from_user_id
+    - name: to_user
+      using:
+        foreign_key_constraint_on: to_user_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - id
+          - from_user_id
+          - to_user_id
+          - amount
+          - token_amount
+          - description
+          - transaction_type
+          - timestamp
+        filter:
+          _or:
+            - from_user_id: X-Hasura-User-Id
+            - to_user_id: X-Hasura-User-Id
+  insert_permissions:
+    - role: user
+      permission:
+        check:
+          from_user_id: X-Hasura-User-Id
+        columns:
+          - from_user_id
+          - to_user_id
+          - amount
+          - token_amount
+          - description
+          - transaction_type
+  update_permissions: []
+  delete_permissions: [] 
