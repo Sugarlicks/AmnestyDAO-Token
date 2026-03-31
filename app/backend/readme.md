@@ -23,20 +23,43 @@ The backend consists of three main components:
 Create a `.env` file in the root directory with the following variables:
 
 ```env
-POSTGRES_USER=your_user
-POSTGRES_PASSWORD=your_password
-POSTGRES_DB=your_database
-DATABASE_URL=postgres://your_user:your_password@postgres:5432/your_database
-
-HASURA_ADMIN_SECRET=your_admin_secret
-JWT_SECRET=your_jwt_secret
 PORT=4000
+
+# Postgres (point this at your Hasura/Postgres container)
+POSTGRES_USER=hrdao
+POSTGRES_PASSWORD=hrdao_password
+POSTGRES_your_db
+DATABASE_URL=postgres://your_user:your_password@postgres:5432/your_db
+
+# JWT secret (keep this safe)
+JWT_SECRET=your_jwt_secret
+
+# HASURA Admin Secret
+HASURA_ADMIN_SECRET=your_admin_secret
+
+# Relying Party settings for WebAuthncp
+RP_NAME=hrdao-mvp
+RP_ID=localhost
+ORIGIN=https://your_origin
+
+# profile photos
+UPLOAD_DIR=./uploads
 
 FIREBASE_PROJECT_ID=your-firebase-app
 FIREBASE_CLIENT_EMAIL=firebase-adminsdk-fbsvc@your-firebase-app.iam.gserviceaccount.com
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...........\n-----END PRIVATE KEY-----\n"
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n XXXXXXXXX....XXXXX \n-----END PRIVATE KEY-----\n"
 
+BLOCKFROST_KEY=your_blockfrost_key
+NETWORK=Preview
 
+ORACLE_MNEMONIC="your oracle mneomic phrase"
+ORACLE_ADDRESS="addr_your_oracle_address"
+
+TOKEN_NAME="your_token_name"
+POLICY_ID="1234...19238"
+
+TREASURY_SCRIPT_ADDRESS="addr_your_treasury_script_address"
+SCRIPT_CBOR="59....123321"
 ```
 
 ## Development Setup
@@ -44,28 +67,32 @@ FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...........\n-----END PRIVATE
 ### Using Docker (Recommended)
 
 1. Start all services:
+
 ```bash
 docker-compose up
 ```
 
 This will start:
+
 - Auth service on port 4000
 - PostgreSQL on port 5432
 - Hasura GraphQL Engine on port 8080
 
 Note: When making changes to the backend you will need to clear cache before composing up again.
-`docker compose build --no-cache``
-then 
+`docker compose build --no-cache`
+then:
 `docker compose up --force-recreate`
 
 ### Manual Setup
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -76,17 +103,26 @@ To initialise the database, you will need to run the migrations located at /hasu
 
 1. Make sure you have the Hasura CLI installed
 
-2. `cd hasura`
+2. Go to the hasura folder
+
+```bash
+cd hasura
+```
 
 3. Run the migrations
 
-```
+```bash
 hasura migrate apply --all-databases \
 --endpoint http://localhost:8080 \
 --admin-secret your_admin_secret
 ```
 
-4. `hasura metadata reload`
+4. Reload hasura
+
+```
+hasura metadata reload \
+--admin-secret your_admin_secret
+```
 
 ## API Endpoints
 
@@ -103,6 +139,10 @@ hasura migrate apply --all-databases \
 - Hasura Console: `http://localhost:8080/console`
 
 ## Database Management
+
+### Initialise the first user
+
+One you have submitted your application in the frontend for the first user, you can manually go into the hasura console at `http://localhost:8080/console`, log in and go to the `users` table to change the status of your user to `admin`
 
 ### Using Hasura Console
 
@@ -135,6 +175,7 @@ The backend can be deployed using the provided `deploy.sh` script:
 ```
 
 This script:
+
 1. Builds the Docker image
 2. Pushes it to the registry
 3. Deploys the services using Docker Compose
@@ -177,4 +218,4 @@ Key dependencies include:
 
 ## License
 
-[Add your license information here]
+AGPL-v3

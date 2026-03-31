@@ -28,6 +28,36 @@ yarn
 npm install
 ```
 
+## Environment Variables
+
+Create a `.env` file in the `frontend/` directory with the following variables:
+
+```.env
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_firebase_app.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_firebase_project
+VITE_FIREBASE_STORAGE_BUCKET=your_firebase_app.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_sender_id
+VITE_FIREBASE_APP_ID=your_firebase_app_id
+VITE_FIREBASE_VAPID_KEY=your_firebase_vapid_key
+
+# optional
+VITE_FIREBASE_MEASUREMENT_ID=your_firebase_measurement_id
+
+
+# Crowdin translations
+CROWDIN_PROJECT_ID=your_crowdin_project_id
+CROWDIN_API_TOKEN=your_crowdin_api_key
+
+VITE_TOKEN_NAME=your_token_name
+VITE_POLICY_ID="1234...19238"
+VITE_TREASURY_SCRIPT_ADDRESS="addr_your_treasury_script_address"
+ENABLE_WEB_DEBUG="true"
+
+VITE_APP_VERSION=0.0.3
+VITE_BUILD_NUMBER=3
+```
+
 ## Development
 
 ### Web Development
@@ -132,4 +162,4 @@ For detailed configuration options, see [Quasar Configuration](https://v2.quasar
 
 ## License
 
-[Add your license information here]
+AGPL-v3
