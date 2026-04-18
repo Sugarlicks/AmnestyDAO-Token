@@ -1,19 +1,55 @@
 
-# 🕊️ AmnestyDAO and Human Rights Token (HRT) – Milestone 1
+# 🕊️ # 🕊️ AmnestyDAO and Human Rights Token (HRT)
 
 **Catalyst Funded Project ID: 1300018**  
-**Version: 1.0 | July 2025**  
+**Current Status: Milestone 3 – MVP Delivered**  
 **Lead Author:** Gareth Farry (Amnesty International Aotearoa New Zealand)  
-**Technical Lead & Co-Author:** Razali Samsudin (Sustainable ADA / Impact Web3)  
-**Contact:** [Project Page](https://amnesty.org.nz/dao/) | gareth.farry@amnesty.org.nz  
+**Technical Lead:** Razali Samsudin (Sustainable ADA / Impact Web3)  
 
 ---
 
-## 🔍 Project Summary
+## 🔍 Project Overview
 
-AmnestyDAO + HRT is a decentralized governance framework to evolve Amnesty International’s global human rights infrastructure. Powered by the Cardano blockchain, the Human Rights DAO (HRDAO) activates the 10M+ Amnesty supporter network, particularly those in censored and marginalized regions, into a participatory, transparent, and resilient movement.
+This repository contains the full outputs of the AmnestyDAO / Human Rights Token (HRT) Catalyst project, including research, tokenomics modelling, and a working MVP DAO application.
 
-This whitepaper serves as the primary deliverable for Milestone 1 of Catalyst proposal #1300018, outlining key research insights, governance architecture, tokenomics design, and implementation roadmap.
+The project explores how decentralised governance systems can be applied within a global human rights movement, enabling supporters to:
+
+- Create and vote on proposals  
+- Receive and allocate tokens based on participation  
+- Engage in transparent, participatory governance processes  
+
+The MVP has been deployed and tested with a pilot group of Amnesty participants across multiple regions.
+
+---
+
+## ⚙️ MVP (Milestone 3)
+
+The MVP DAO system includes:
+
+- Proposal creation and management  
+- Token-based voting  
+- Token allocation mechanisms  
+- Backend services for authentication and transaction handling  
+- Frontend interface for user participation  
+
+### 📁 Key Directories
+
+- `/app` – Core MVP application (frontend + backend)  
+- `/smart-contracts` – Token and governance contract logic  
+- `/audits` – Technical and tokenomics review materials  
+- `/Tokenomics Model and Technical Report` – Milestone 2 outputs  
+
+---
+
+## ⚠️ MVP Scope & Limitations
+
+This MVP was developed for pilot testing and validation purposes.
+
+- Identity is pseudonymous (wallet / login-based)  
+- Advanced identity layers (DID, zk-ID) are not yet implemented  
+- Security hardening (auth verification, audits, scaling) is planned for future phases  
+
+The focus of this milestone is validating governance flows and user participation, rather than production-grade infrastructure.
 
 ---
 
@@ -144,3 +180,13 @@ This is not just a technical proposal.
 It is an architecture of memory and care.  
 A refusal to be erased.  
 A new covenant of participation grounded in dignity and collective resilience.
+
+## 📊 Milestone 3 Evidence
+
+This repository forms part of the Milestone 3 submission and includes:
+
+- MVP codebase  
+- System architecture documentation  
+- Tokenomics model and simulations  
+- Audit and review materials  
+- Pilot testing outputs (external references)  
