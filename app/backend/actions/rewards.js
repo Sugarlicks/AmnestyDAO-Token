@@ -63,8 +63,34 @@ async function getWalletCollateralDiagnostics(wallet) {
   }
 }
 
+const MAX_REWARD_RETRIES = 3;
+const RETRY_DELAY_MS = 30_000; // 30 seconds between retries
+
+// Round-robin UTxO selection to avoid contention when multiple
+// reward requests arrive concurrently. Each request gets assigned
+// a different UTxO index so they don't all fight over the same one.
+let _utxoRoundRobinIndex = 0;
+
 async function rewardReceiverFromTreasury(receiverAddress, amountToSend, userId = null, contributionId = null, description = 'Reward') {
-  
+  for (let attempt = 1; attempt <= MAX_REWARD_RETRIES; attempt++) {
+    try {
+      return await _buildAndSubmitReward(receiverAddress, amountToSend, userId, contributionId, description);
+    } catch (error) {
+      const msg = error?.message || '';
+      const isUtxoContention = msg.includes('All inputs are spent') || msg.includes('UTxO Fully Depleted');
+
+      if (isUtxoContention && attempt < MAX_REWARD_RETRIES) {
+        console.warn(`⚠️  Reward attempt ${attempt}/${MAX_REWARD_RETRIES} failed (UTxO contention). Retrying in ${RETRY_DELAY_MS / 1000}s...`);
+        await new Promise(r => setTimeout(r, RETRY_DELAY_MS));
+        continue;
+      }
+      throw error;
+    }
+  }
+}
+
+async function _buildAndSubmitReward(receiverAddress, amountToSend, userId = null, contributionId = null, description = 'Reward') {
+
   if (missingKeys.length) {
     console.error('❌ Required env vars missing:', missingKeys.join(', '));
     console.error('👉 Ensure you have generated & funded ORACLE, minted tokens, and seeded the treasury if needed.');
@@ -104,8 +130,9 @@ async function rewardReceiverFromTreasury(receiverAddress, amountToSend, userId 
   const scriptUtxos = await getAddressUtxos(treasuryScriptAddress);
 
   assert(scriptUtxos.length, '❌ No UTxOs at treasury script address');
-  // Rank UTxOs that have the target token by (token qty desc, lovelace desc)
 
+  // Filter to UTxOs that hold our reward token, sorted by ADA desc to
+  // prefer UTxOs with enough ADA to cover fees and min output.
   const rankedCandidates = scriptUtxos
     .map((u) => {
       const amounts = u?.output?.amount ?? u?.amount ?? [];
@@ -115,14 +142,19 @@ async function rewardReceiverFromTreasury(receiverAddress, amountToSend, userId 
     })
     .filter((x) => x.tokenQty > 0n)
     .sort((a, b) => {
-      if (a.tokenQty === b.tokenQty) {
-        if (a.lovelace === b.lovelace) return 0;
-        return a.lovelace < b.lovelace ? 1 : -1;
+      if (a.lovelace === b.lovelace) {
+        if (a.tokenQty === b.tokenQty) return 0;
+        return a.tokenQty < b.tokenQty ? 1 : -1;
       }
-      return a.tokenQty < b.tokenQty ? 1 : -1;
+      return a.lovelace < b.lovelace ? 1 : -1;
     });
-  const target = rankedCandidates[0]?.u;
-  assert(target, `❌ No treasury UTxO with inline datum found holding asset ${rewardToken}. Rerun seeding to create an inline-datum UTxO.`);
+
+  assert(rankedCandidates.length, `❌ No treasury UTxO with inline datum found holding asset ${rewardToken}. Rerun seeding to create an inline-datum UTxO.`);
+
+  // Round-robin: each concurrent request picks a different UTxO to avoid contention.
+  const candidateIndex = _utxoRoundRobinIndex++ % rankedCandidates.length;
+  const target = rankedCandidates[candidateIndex].u;
+  console.log(`🔄 UTxO round-robin: picked index ${candidateIndex}/${rankedCandidates.length} (${target.input.txHash.slice(0, 16)}...#${target.input.outputIndex})`);
 
   const amounts = target?.output?.amount ?? target?.amount ?? [];
   const currentQty = BigInt((amounts.find((a) => a.unit === rewardToken)?.quantity) ?? 0n);
@@ -147,7 +179,10 @@ async function rewardReceiverFromTreasury(receiverAddress, amountToSend, userId 
       plutusData: mConStr(0, []), // empty plutus data
     };
 
-    const receiverMinAda = await txBuilder.calculateMinLovelaceForOutput(transactionOutputs);
+    const calculatedMinAda = await txBuilder.calculateMinLovelaceForOutput(transactionOutputs);
+    // Send at least 2 ADA so the receiver accumulates enough ADA across
+    // registration + contribution rewards (~4 ADA total) for donation transactions
+    const receiverMinAda = Math.max(Number(calculatedMinAda), 2_000_000).toString();
 
     // Select collateral UTxOs from oracle wallet (required for Plutus spending)
     // Collateral requirements:
