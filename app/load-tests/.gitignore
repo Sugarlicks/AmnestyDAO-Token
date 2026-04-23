@@ -1,0 +1,6 @@
+node_modules/
+.env
+results/test-users.json
+results/*_raw.json
+results/*/*.log
+results/*_raw.json

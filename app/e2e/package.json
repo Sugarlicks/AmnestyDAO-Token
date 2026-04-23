@@ -1,0 +1,26 @@
+{
+  "name": "amnesty-dao-e2e",
+  "version": "1.0.0",
+  "description": "E2E tests for Amnesty DAO",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "verify": "tsx setup/verify-setup.ts"
+  },
+  "dependencies": {
+    "@meshsdk/core": "^1.9.0-beta.84",
+    "@meshsdk/core-csl": "^1.9.0-beta.79",
+    "dotenv": "^16.5.0",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^20.0.0",
+    "@types/pg": "^8.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.6.3"
+  }
+}

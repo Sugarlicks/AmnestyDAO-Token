@@ -1,0 +1,19 @@
+{
+  "name": "amnesty-dao-load-tests",
+  "version": "1.0.0",
+  "description": "Load testing suite for Amnesty DAO - targeting 100 TPS scaling analysis",
+  "scripts": {
+    "seed": "node scripts/seed-test-data.js",
+    "seed:cleanup": "node scripts/seed-test-data.js --cleanup",
+    "test:auth": "k6 run tests/auth-endpoints.js",
+    "test:graphql": "k6 run tests/graphql-queries.js",
+    "test:all": "bash scripts/run-all.sh",
+    "test:ramp": "bash scripts/run-ramp.sh"
+  },
+  "dependencies": {
+    "pg": "^8.11.3",
+    "dotenv": "^16.3.1",
+    "uuid": "^9.0.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
