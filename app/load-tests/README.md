@@ -153,3 +153,18 @@ The tests are designed to measure these specific scaling constraints:
 2. **Blockfrost API** (50 req/sec free tier) — hard ceiling for blockchain operations
 3. **Treasury UTxO contention** — multiple concurrent rewards competing for the same UTxOs
 4. **Connection pool fragmentation** — 3+ separate pg.Pool instances in backend
+
+## Cardano Protocol Changes
+
+The auth endpoint tests (registration rewards) interact with the Cardano Preprod testnet via MeshSDK (`@meshsdk/core`). When Cardano undergoes protocol parameter changes or hard forks, the Preprod testnet is updated first as a testing ground. These changes can cause blockchain-related test failures (transaction building errors, Plutus evaluation failures) if MeshSDK has not yet been updated to support the new parameters.
+
+If blockchain tests begin failing after a known protocol update:
+
+1. Check the [Cardano updates page](https://docs.cardano.org/about-cardano/evolution/upgrades/) for recent hard forks
+2. Check the [MeshSDK releases](https://github.com/MeshJS/mesh/releases) for a compatible update
+3. Update `@meshsdk/core` in `backend/package.json` and re-run `npm install`
+4. Re-seed the treasury if needed (`e2e/setup/seed-treasury-multi.ts`)
+
+GraphQL query tests are unaffected by protocol changes as they do not interact with the blockchain.
+
+Test results should be considered valid at the time of execution. Future protocol changes may require MeshSDK updates before blockchain tests can pass again.

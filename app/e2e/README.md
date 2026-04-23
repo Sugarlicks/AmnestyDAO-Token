@@ -209,3 +209,18 @@ Send more ADA from the [preprod faucet](https://docs.cardano.org/cardano-testnet
 ### Blockfrost rate limited
 
 Create a new free API key at [blockfrost.io](https://blockfrost.io) for the Preprod network and update `BLOCKFROST_KEY` in `backend/.env`.
+
+## Cardano Protocol Changes
+
+These tests run against the Cardano Preprod testnet and depend on MeshSDK (`@meshsdk/core`) for wallet operations and transaction building. When the Cardano network undergoes protocol parameter changes or hard forks (e.g. Conway era upgrades), the Preprod testnet is typically updated first as a testing ground.
+
+Protocol changes can cause test failures if MeshSDK has not yet been updated to support the new parameters. Symptoms include transaction building errors, Plutus evaluation failures, or wallet initialisation issues that were not present before the protocol change.
+
+If tests begin failing after a known protocol update:
+
+1. Check the [Cardano updates page](https://docs.cardano.org/about-cardano/evolution/upgrades/) for recent or upcoming hard forks
+2. Check the [MeshSDK releases](https://github.com/MeshJS/mesh/releases) for a compatible update
+3. Update `@meshsdk/core` in both `backend/package.json` and `frontend/package.json` to the latest version
+4. Re-run `npm install` and verify E2E tests pass
+
+Tests should be considered valid at the time of execution. Future protocol changes may require MeshSDK updates before tests can pass again.
