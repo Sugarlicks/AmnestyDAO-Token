@@ -1,6 +1,20 @@
 
 # AmnestyDAO – Human Rights DAO (HRDAO)
 
+> [!IMPORTANT]
+>
+> ## Canonical repository moved
+>
+> The official and actively stewarded repository for the Human Rights DAO project has moved to **Amnesty International Aotearoa New Zealand**:
+>
+> **[View the canonical Amnesty HRDAO repository](https://github.com/AmnestyInternationalNZ/AmnestyDAO-Token)**
+>
+> This Sugarlicks repository preserves the original development history and remains available as the upstream project record. Future governance documentation, releases, issues, contributions and project development should be directed to the Amnesty repository.
+>
+> **Canonical repository:** `AmnestyInternationalNZ/REPOSITORY-NAME`
+> **Repository transition:** July 2026
+
+
 ## Milestone 3 – MVP and Testing Validation
 
 This repository contains the AmnestyDAO MVP and supporting artefacts delivered under Project Catalyst Milestone 3.
